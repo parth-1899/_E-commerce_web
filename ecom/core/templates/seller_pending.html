@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Verification Pending — ShopNest{% endblock %}
+
+{% block content %}
+<div style="max-width:480px; margin:4rem auto; text-align:center;">
+  <div style="font-size:4rem; margin-bottom:1.5rem;">⏳</div>
+  <h1 style="font-family:'Playfair Display',serif; font-size:2rem; margin-bottom:0.8rem;">Verification Pending</h1>
+  <p style="color:var(--muted); margin-bottom:2rem; line-height:1.7;">
+    Your seller account is under review by our admin team.<br/>
+    You'll be able to list products once verified.<br/>
+    This usually takes <strong style="color:var(--text);">a few hours</strong>.
+  </p>
+
+  <div class="card" style="text-align:left; margin-bottom:1.5rem;">
+    <div style="display:flex; flex-direction:column; gap:0.8rem;">
+      <div style="display:flex; align-items:center; gap:0.8rem;">
+        <span style="font-size:1.2rem;">✅</span>
+        <div>
+          <div style="font-weight:600; font-size:0.9rem;">Registered</div>
+          <div style="color:var(--muted); font-size:0.82rem;">Account created successfully</div>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:0.8rem;">
+        {% if user.sellerprofile %}
+        <span style="font-size:1.2rem;">✅</span>
+        {% else %}
+        <span style="font-size:1.2rem;">🔲</span>
+        {% endif %}
+        <div>
+          <div style="font-weight:600; font-size:0.9rem;">Documents Submitted</div>
+          <div style="color:var(--muted); font-size:0.82rem;">Business doc & ISI certificate</div>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:0.8rem;">
+        <span style="font-size:1.2rem;">🔲</span>
+        <div>
+          <div style="font-weight:600; font-size:0.9rem;">Admin Approval</div>
+          <div style="color:var(--muted); font-size:0.82rem;">Under review</div>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:0.8rem;">
+        <span style="font-size:1.2rem;">🔲</span>
+        <div>
+          <div style="font-weight:600; font-size:0.9rem;">Start Selling</div>
+          <div style="color:var(--muted); font-size:0.82rem;">List your products</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if not user.sellerprofile %}
+    <a href="{% url 'seller_register' %}" class="btn btn-primary">Submit Documents</a>
+  {% else %}
+    <a href="{% url 'product_list' %}" class="btn btn-outline">Browse Products</a>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% block title %}Add Product — ShopNest{% endblock %}
+
+{% block extra_head %}
+<style>
+  .shop-layout { display: grid; grid-template-columns: 1fr 1.5fr; gap: 2rem; align-items: start; }
+  @media (max-width: 768px) { .shop-layout { grid-template-columns: 1fr; } }
+  .upload-preview {
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    overflow: hidden;
+    position: relative;
+  }
+  .upload-preview:hover { border-color: var(--accent); }
+  .upload-preview img { width:100%; height:100%; object-fit:cover; position:absolute; top:0; left:0; }
+  .my-products-list { display: flex; flex-direction: column; gap: 0.8rem; margin-top: 1rem; }
+  .my-product-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .my-product-item .name { font-weight: 600; font-size: 0.9rem; }
+  .my-product-item .price { color: var(--accent); font-size: 0.88rem; }
+  .seller-badge {
+    display: flex; align-items: center; gap: 0.5rem;
+    background: rgba(76,175,125,0.1); border: 1px solid rgba(76,175,125,0.2);
+    border-radius: 8px; padding: 0.7rem 1rem; margin-bottom: 1.5rem;
+    font-size: 0.88rem; color: #7ecfa5;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>My Shop</h1>
+  <p>Add and manage your products</p>
+</div>
+
+<div class="seller-badge">
+  ✅ Verified Seller — <strong>{{ user.username }}</strong>
+</div>
+
+<div class="shop-layout">
+  <!-- LEFT: My Products -->
+  <div>
+    <div class="card">
+      <h3 style="font-family:'Playfair Display',serif; margin-bottom:1rem;">My Products
+        <span class="badge badge-yellow" style="font-size:0.75rem; margin-left:0.5rem;">{{ my_products.count }}</span>
+      </h3>
+      {% if my_products %}
+        <div class="my-products-list">
+          {% for p in my_products %}
+          <div class="my-product-item">
+            <div>
+              <div class="name">{{ p.name }}</div>
+              <div class="price">₹{{ p.price }}</div>
+            </div>
+            <span class="badge badge-green">Listed</span>
+          </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p style="color:var(--muted); font-size:0.88rem;">No products yet. Add your first one! →</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- RIGHT: Add Product Form -->
+  <div>
+    <div class="card">
+      <h3 style="font-family:'Playfair Display',serif; margin-bottom:1.5rem;">Add New Product</h3>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Product Image</label>
+          <div class="upload-preview" id="preview-box" onclick="document.getElementById('img-input').click()">
+            <span id="preview-icon">📸</span>
+          </div>
+          <input type="file" name="image" id="img-input" accept="image/*" style="display:none;" />
+        </div>
+        <div class="form-group">
+          <label>Product Name</label>
+          <input type="text" name="name" placeholder="e.g. Wireless Headphones" required />
+        </div>
+        <div class="form-group">
+          <label>Price (₹)</label>
+          <input type="number" name="price" step="0.01" placeholder="0.00" required />
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea name="description" rows="4" placeholder="Describe your product features, condition, etc."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Add Product</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('img-input').addEventListener('change', function() {
+    if (this.files[0]) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const box = document.getElementById('preview-box');
+        document.getElementById('preview-icon').style.display = 'none';
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        box.appendChild(img);
+      };
+      reader.readAsDataURL(this.files[0]);
+    }
+  });
+</script>
+{% endblock %}

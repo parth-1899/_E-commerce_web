@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block title %}Seller Verification — ShopNest{% endblock %}
+
+{% block extra_head %}
+<style>
+  .verify-wrap { max-width: 520px; margin: 2rem auto; }
+  .verify-header { text-align: center; margin-bottom: 2rem; }
+  .verify-header h1 { font-family: 'Playfair Display', serif; font-size: 2rem; }
+  .verify-header p { color: var(--muted); margin-top: 0.4rem; }
+  .steps {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .step.active { color: var(--accent); }
+  .step-num {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.75rem; font-weight: 700;
+  }
+  .step.active .step-num { background: var(--accent); color: #000; border-color: var(--accent); }
+  .step-divider { color: var(--border); font-size: 1rem; }
+  .upload-box {
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.88rem;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .upload-box:hover { border-color: var(--accent); }
+  .upload-icon { font-size: 1.5rem; margin-bottom: 0.3rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="verify-wrap">
+  <div class="verify-header">
+    <h1>Seller Verification</h1>
+    <p>Upload your documents to start selling on ShopNest</p>
+  </div>
+
+  <div class="steps">
+    <div class="step active">
+      <div class="step-num">1</div> Register
+    </div>
+    <div class="step-divider">→</div>
+    <div class="step active">
+      <div class="step-num">2</div> Submit Docs
+    </div>
+    <div class="step-divider">→</div>
+    <div class="step">
+      <div class="step-num">3</div> Admin Review
+    </div>
+    <div class="step-divider">→</div>
+    <div class="step">
+      <div class="step-num">4</div> Start Selling
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="alert alert-info" style="margin-bottom:1.5rem;">
+      📋 Please upload your Business Document and ISI Certificate. Our admin team will review within 24 hours.
+    </div>
+
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-group">
+        <label>Business Document</label>
+        <div class="upload-box" onclick="document.getElementById('id_business_doc').click()">
+          <div class="upload-icon">📄</div>
+          <div>Click to upload (PDF / Image)</div>
+        </div>
+        <input type="file" name="business_doc" id="id_business_doc" style="display:none;" required />
+      </div>
+      <div class="form-group">
+        <label>ISI Certificate</label>
+        <div class="upload-box" onclick="document.getElementById('id_isi_certificate').click()">
+          <div class="upload-icon">📜</div>
+          <div>Click to upload (PDF / Image)</div>
+        </div>
+        <input type="file" name="isi_certificate" id="id_isi_certificate" style="display:none;" required />
+      </div>
+      <button type="submit" class="btn btn-primary btn-full">Submit for Verification</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  // Show selected filename
+  ['id_business_doc','id_isi_certificate'].forEach(id => {
+    document.getElementById(id).addEventListener('change', function() {
+      const box = this.previousElementSibling;
+      if (this.files[0]) box.innerHTML = `<div class="upload-icon">✅</div><div>${this.files[0].name}</div>`;
+    });
+  });
+</script>
+{% endblock %}

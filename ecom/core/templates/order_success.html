@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Order Placed — ShopNest{% endblock %}
+{% block content %}
+<div style="max-width:420px; margin:4rem auto; text-align:center;">
+  <div style="font-size:4rem; margin-bottom:1rem;">🎉</div>
+  <h1 style="font-family:'Playfair Display',serif; font-size:2rem; margin-bottom:0.8rem;">Order Placed!</h1>
+  <p style="color:var(--muted); margin-bottom:2rem;">Your order has been placed successfully. Thank you for shopping with ShopNest!</p>
+  <div style="display:flex; gap:1rem; justify-content:center;">
+    <a href="{% url 'my_orders' %}" class="btn btn-primary">View My Orders</a>
+    <a href="{% url 'product_list' %}" class="btn btn-outline">Continue Shopping</a>
+  </div>
+</div>
+{% endblock %}

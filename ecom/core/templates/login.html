@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Login — ShopNest{% endblock %}
+
+{% block extra_head %}
+<style>
+  .auth-wrap {
+    max-width: 420px;
+    margin: 3rem auto;
+  }
+  .auth-header { text-align: center; margin-bottom: 2rem; }
+  .auth-header h1 { font-family: 'Playfair Display', serif; font-size: 2rem; }
+  .auth-header p { color: var(--muted); margin-top: 0.4rem; }
+  .auth-footer { text-align: center; margin-top: 1.5rem; color: var(--muted); font-size: 0.88rem; }
+  .auth-footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-header">
+    <h1>Welcome Back</h1>
+    <p>Sign in to your ShopNest account</p>
+  </div>
+
+  <div class="card">
+    {% if error %}
+      <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST">
+      {% csrf_token %}
+      <div class="form-group">
+        <label>Username</label>
+        <input type="text" name="username" placeholder="Your username" required autofocus />
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Your password" required />
+      </div>
+      <button type="submit" class="btn btn-primary btn-full" style="margin-top:0.5rem;">Sign In</button>
+    </form>
+  </div>
+
+  <div class="auth-footer">
+    Don't have an account? <a href="{% url 'register' %}">Create one →</a>
+  </div>
+</div>
+{% endblock %}
